@@ -1,0 +1,170 @@
+---
+#                _   _
+#  ___  __   __ (_) | |   ___
+# / __| \ \ / / | | | |  / _ \
+# \__ \  \ / /  | | | | |  __/
+# |___/   \_/   |_| |_|  \___|
+#
+# SkyWars plugin for PocketMine-MP & forks
+#
+# @Author: svile
+# @Kik: _svile_
+# @Telegram_Gruop: https://telegram.me/svile
+# @E-mail: thesville@gmail.com
+# @Github: https://github.com/svilex/SkyWars-PocketMine
+
+CONFIG_VERSION: 0.6dev
+
+
+###########################################_GAME_###########################################
+
+# Players playing a SkyWars game won't be able to run these commands.
+# You can add or delete commands but make sure to respect syntax.
+banned.commands.while.in.game:
+- /hub
+- /lobby
+- /spawn
+- /tpa
+- /tp
+- /tpaccept
+- /back
+- /home
+- /f
+- /kill
+
+# If this option is "true" , the game will start once all the slots will be finished , regardless from countdown.
+start.when.full: true
+
+# The countdown will only run when there will be N players in the arena.
+needed.players.to.run.countdown: 3
+
+# ------------------------------------------HEALTH------------------------------------------
+#              1 = half a heart
+#                2 = 1 heart
+#                 ...etc...
+
+# The players max health will be set to this value when joining a SkyWars game.
+# N.B : This value can increase for players with HEALTH BOOST effects
+join.max.health: 20
+
+# The players health will be set to this value when joining a SkyWars game.
+# N.B : If greater than the player max health , max health will be used instead.
+join.health: 99
+# ------------------------------------------\HEALTH-----------------------------------------
+
+# Players playing a SkyWars game won't be damaged from the following causes.
+# 0 = CAUSE_CONTACT
+# 1 = CAUSE_ENTITY_ATTACK
+# 2 = CAUSE_PROJECTILE
+# 3 = CAUSE_SUFFOCATION
+# 4 = CAUSE_FALL
+# 5 = CAUSE_FIRE
+# 6 = CAUSE_FIRE_TICK
+# 7 = CAUSE_LAVA
+# 8 = CAUSE_DROWNING
+# 9 = CAUSE_BLOCK_EXPLOSION
+# 10 = CAUSE_ENTITY_EXPLOSION
+# 11 = CAUSE_VOID
+# 12 = CAUSE_SUICIDE
+# 13 = CAUSE_MAGIC
+# 14 = CAUSE_CUSTOM
+# 15 = CAUSE_STARVATION
+# 16 = CAUSE_LIGHTNING
+damage.cancelled.causes:
+- 0
+
+# Players playing a SkyWars game won't drop anything on death if this option = "false".
+drops.on.death: true
+
+# Players playing a SkyWars game won't be able to drop items if this option = "false".
+player.drop.item: false
+
+# This is the refill chests' switch. You can decide to refill chests or not.
+chest.refill: true
+
+# If "chest.refill" (the above option) is "true" :
+# chests will be refilled on game start & , according to this option , each N seconds from the start.
+# N.B : To disable the "refill each N seconds" just put a big number EX: Your games lasts 5min? set this to 300.
+chest.refill.rate: 240
+
+# After the game start, players won't be able to PvP for N seconds (default 20).
+# N.B : To disable this just put 0 seconds.
+no.pvp.countdown: 0
+
+# Spectator gamemode for killed players.
+# N.B : Players will be able to fly far away.
+# N.B : So , I recommend you to set "world.generator.air" to true.
+death.spectator: true
+
+# The spectator will be able to select this item to quit from the SW game.
+# N.B : Respect syntax " id:meta "
+spectator.quit.item: '120:0'
+
+# ------------------------------------------REWARDS------------------------------------------
+# Award winning players' switch.
+# N.B : You need a supported economy plugin for this to work.
+reward.winning.players: true
+
+# How many money-coins should this player win?
+reward.value: 20
+
+# If you want you can write a command here , it will be executed when a player wins.
+# N.B : You can use {PLAYER} as the player name. EXAMPLE: '/tell {PLAYER} You won!'
+# N:B : The command is executed as console
+reward.command: '/'
+# ------------------------------------------\REWARDS-----------------------------------------
+
+
+########################################_JOIN-SIGNS_########################################
+
+# Signs format.
+1st_line: §l§c[§bSkyWars§c]
+2nd_line: §l§e{SWNAME}
+
+# Refreshes signs each 5 seconds.
+# Hint : This is useful if you often see signs displaying wrong info about SW games.
+# Hint : Only enable if you've noticed the above problem.
+sign.tick: false
+
+# This pushes players away from signs , like when damaged in PvP.
+sign.knockBack: true
+
+# Radius in blocks from signs.
+# Players inside this radius will be pushed.
+# N.B : The involved area is not a circle but a square. XD
+knockBack.radius.from.sign: 1
+
+# This is: how much strong is the push.
+# Recommended values are from 0 to 50.
+knockBack.intensity: 2
+
+# Should the push follow the sign direction?
+knockBack.follow.sign.direction: false
+
+
+##########################################_RESPAWN_##########################################
+
+always.spawn.in.defaultLevel: true
+
+clear.inventory.on.respawn&join: false
+
+clear.inventory.on.arena.join: true
+
+clear.effects.on.respawn&join: false
+
+clear.effects.on.arena.join: true
+
+
+###########################################_WORLD_###########################################
+
+# When new chunks are generated , this option fills them with air blocks.
+# N.B : This only happens after the arena is created.
+world.generator.air: true
+
+# .tar backups will be compressed into .tar.gz when the arena is first created
+world.compress.tar: true
+
+# Experimental: if you change this to "false" , the worlds won't save changes. This is the fastest way.
+# If you have trouble with world reset , just put this back to "true".
+world.reset.from.tar: true
+...
