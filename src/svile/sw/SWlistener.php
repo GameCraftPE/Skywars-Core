@@ -80,17 +80,17 @@ class SWlistener implements Listener
     {
         $this->pg = $plugin;
     }
-	
+
     public function onJoin(PlayerJoinEvent $ev){
-	$ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3");    
+	$ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3");
 	if ($ev->getPlayer()->hasPermission("rank.diamond")){
 		$ev->getPlayer()->setGamemode("1");
 		$pk = new ContainerSetContentPacket();
 		$pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
 		$ev->getPlayer()->dataPacket($pk);
 	}
-    } 	
-    
+    }
+
     public function onSignChange(SignChangeEvent $ev)
     {
         if ($ev->getLine(0) != 'sw' || $ev->getPlayer()->isOp() == false)
@@ -243,11 +243,10 @@ class SWlistener implements Listener
 
     public function onMove(PlayerMoveEvent $ev)
     {
-        $player = $ev->getPlayer();
-        if ($player->getLevel()->getFolderName() === "Lobby"){
-          if($ev->getTo()->getFloorY() < 0){
-            $player->setHealth($player->getHealth(0));
-          }
+        if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
+            if($ev->getTo()->getFloorY() < 3){
+              $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3");
+            }
         }
         foreach ($this->pg->arenas as $a) {
             if ($a->inArena($ev->getPlayer()->getName())) {
@@ -476,11 +475,6 @@ class SWlistener implements Listener
                             break;
                         }
                     }
-                    $cause = (int)$ev->getCause();
-                    if (in_array($cause, $this->pg->configs['damage.cancelled.causes'])) {
-                        $ev->setCancelled();
-                        break;
-                    }
                     if ($a->GAME_STATE == 0 || $a->GAME_STATE == 2) {
                         $ev->setCancelled();
                         break;
@@ -617,21 +611,5 @@ class SWlistener implements Listener
                 break;
             }
         }
-    }
-
-
-    public function onCommand(PlayerCommandPreprocessEvent $ev)
-    {
-        $command = strtolower($ev->getMessage());
-        if ($command{0} == '/') {
-            $command = explode(' ', $command)[0];
-            if ($this->pg->inArena($ev->getPlayer()->getName())) {
-                if (in_array($command, $this->pg->configs['banned.commands.while.in.game'])) {
-                    $ev->getPlayer()->sendMessage($this->pg->lang['banned.command.msg']);
-                    $ev->setCancelled();
-                }
-            }
-        }
-        unset($command);
     }
 }

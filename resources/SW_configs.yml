@@ -18,20 +18,6 @@ CONFIG_VERSION: 0.6dev
 
 ###########################################_GAME_###########################################
 
-# Players playing a SkyWars game won't be able to run these commands.
-# You can add or delete commands but make sure to respect syntax.
-banned.commands.while.in.game:
-- /hub
-- /lobby
-- /spawn
-- /tpa
-- /tp
-- /tpaccept
-- /back
-- /home
-- /f
-- /kill
-
 # If this option is "true" , the game will start once all the slots will be finished , regardless from countdown.
 start.when.full: true
 
@@ -49,35 +35,14 @@ join.max.health: 20
 
 # The players health will be set to this value when joining a SkyWars game.
 # N.B : If greater than the player max health , max health will be used instead.
-join.health: 99
+join.health: 20
 # ------------------------------------------\HEALTH-----------------------------------------
-
-# Players playing a SkyWars game won't be damaged from the following causes.
-# 0 = CAUSE_CONTACT
-# 1 = CAUSE_ENTITY_ATTACK
-# 2 = CAUSE_PROJECTILE
-# 3 = CAUSE_SUFFOCATION
-# 4 = CAUSE_FALL
-# 5 = CAUSE_FIRE
-# 6 = CAUSE_FIRE_TICK
-# 7 = CAUSE_LAVA
-# 8 = CAUSE_DROWNING
-# 9 = CAUSE_BLOCK_EXPLOSION
-# 10 = CAUSE_ENTITY_EXPLOSION
-# 11 = CAUSE_VOID
-# 12 = CAUSE_SUICIDE
-# 13 = CAUSE_MAGIC
-# 14 = CAUSE_CUSTOM
-# 15 = CAUSE_STARVATION
-# 16 = CAUSE_LIGHTNING
-damage.cancelled.causes:
-- 0
 
 # Players playing a SkyWars game won't drop anything on death if this option = "false".
 drops.on.death: true
 
 # Players playing a SkyWars game won't be able to drop items if this option = "false".
-player.drop.item: false
+player.drop.item: true
 
 # This is the refill chests' switch. You can decide to refill chests or not.
 chest.refill: true
@@ -139,7 +104,7 @@ knockBack.radius.from.sign: 1
 knockBack.intensity: 2
 
 # Should the push follow the sign direction?
-knockBack.follow.sign.direction: false
+knockBack.follow.sign.direction: true
 
 
 ##########################################_RESPAWN_##########################################
