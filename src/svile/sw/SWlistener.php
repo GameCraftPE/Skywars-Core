@@ -487,6 +487,8 @@ class SWlistener implements Listener
                             $ev->setCancelled();
                             //FAKE KILL PLAYER MSG
                             $count = '[' . ($a->getSlot(true) - 1) . '/' . $a->getSlot() . ']';
+                            $cause = $ev->getEntity()->getLastDamageCause()->getCause();
+
 
                             switch ($cause):
 
