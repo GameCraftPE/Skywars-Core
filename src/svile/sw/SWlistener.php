@@ -68,7 +68,6 @@ use pocketmine\level\Location;
 
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
-use pocketmine\math\Vector3;
 
 class SWlistener implements Listener
 {
@@ -82,13 +81,13 @@ class SWlistener implements Listener
     }
 
     public function onJoin(PlayerJoinEvent $ev){
-	$ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3");
-	if ($ev->getPlayer()->hasPermission("rank.diamond")){
-		$ev->getPlayer()->setGamemode("1");
-		$pk = new ContainerSetContentPacket();
-		$pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
-		$ev->getPlayer()->dataPacket($pk);
-	}
+	     $ev->getPlayer()->teleport(new Position("189.754200", "64.500000", "5.631000"), "90", "9", $ev->getPlayer()->getLevel()->getFolderName("Hub"));
+	      if ($ev->getPlayer()->hasPermission("rank.diamond")){
+		        $ev->getPlayer()->setGamemode("1");
+		        $pk = new ContainerSetContentPacket();
+		        $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
+		        $ev->getPlayer()->dataPacket($pk);
+	      }
     }
 
     public function onSignChange(SignChangeEvent $ev)
@@ -246,6 +245,11 @@ class SWlistener implements Listener
         if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
             if($ev->getTo()->getFloorY() < 3){
               $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3");
+            }
+        }
+        if ($ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
+            if($ev->getTo()->getFloorY() < 3){
+              $ev->getPlayer()->teleport(new Position("189.754200", "64.500000", "5.631000"), "90", "9");
             }
         }
         foreach ($this->pg->arenas as $a) {
@@ -460,7 +464,7 @@ class SWlistener implements Listener
     {
         if ($ev->getEntity() instanceof Player) {
             $p = $ev->getEntity();
-            if ($p->getLevel()->getFolderName() === "Lobby"){
+            if ($p->getLevel()->getFolderName() === "Lobby" || $p->getLevel()->getFolderName() === "Hub"){
                 $ev->setCancelled();
             }
             foreach ($this->pg->arenas as $a) {
@@ -571,9 +575,9 @@ class SWlistener implements Listener
 
     public function onBreak(BlockBreakEvent $ev)
     {
-        if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
-            $ev->setCancelled();
-        }
+      if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby" || $ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
+          $ev->setCancelled();
+      }
         foreach ($this->pg->arenas as $a) {
             if ($t = $a->inArena($ev->getPlayer()->getName())) {
                 if ($t == 2)
@@ -601,7 +605,7 @@ class SWlistener implements Listener
 
     public function onPlace(BlockPlaceEvent $ev)
     {
-        if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
+        if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby" || $ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
             $ev->setCancelled();
         }
         foreach ($this->pg->arenas as $a) {

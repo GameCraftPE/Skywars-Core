@@ -54,6 +54,7 @@ use pocketmine\utils\TextFormat;
 
 use pocketmine\tile\Chest;
 use pocketmine\item\Item;
+use pocketmine\math\Vector3;
 
 
 final class SWarena
@@ -415,6 +416,8 @@ final class SWarena
         }
         $this->pg->getServer()->loadLevel($this->world);
         $level = $this->pg->getServer()->getLevelByName($this->world);
+        $level->setTime(0);
+        $level->stopTime();
         $tmp = array_shift($this->spawns);
         $player->teleport(new Position($tmp['x'] + 0.5, $tmp['y'], $tmp['z'] + 0.5, $level), $tmp['yaw'], $tmp['pitch']);
         $this->players[$player->getName()] = $tmp;
@@ -474,7 +477,7 @@ final class SWarena
             $p->setGamemode($p->getServer()->getDefaultGamemode());
             $p->getInventory()->clearAll();
             $p->removeAllEffects();
-	    $p->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3");    	
+            $p->teleport(new Position("-0.491200", "77.000000", "9.780400", $this->pg->getServer()->getLevelByName("Lobby")), "179", "-3");
 	        if ($p->hasPermission("rank.diamond")){
 		        $p->setGamemode("1");
 		        $pk = new ContainerSetContentPacket();
@@ -494,7 +497,7 @@ final class SWarena
             }
             if (!$spectate) {
                 //TODO: Invisibility issues for death players
-                $p->teleport($p->getServer()->getDefaultLevel()->getSpawnLocation());
+                $p->teleport(new Position("-0.491200", "77.000000", "9.780400", $this->pg->getServer()->getLevelByName("Lobby")), "179", "-3");
             } elseif ($this->GAME_STATE > 0 && 1 < count($this->players)) {
                 $p->gamemode = Player::SPECTATOR;
                 $p->spawnToAll();
@@ -563,15 +566,15 @@ final class SWarena
 	   }
    }
 
-	
+
     /** VOID */
     private function start()
-    {    
+    {
         if ($this->pg->configs['chest.refill'])
             $this->refillChests();
         foreach ($this->players as $name => $spawn) {
             if (($p = $this->pg->getServer()->getPlayer($name)) instanceof Player) {
-		$this->giveKit($p);    
+		            $this->giveKit($p);
                 $p->setMaxHealth($this->pg->configs['join.max.health']);
                 $p->setMaxHealth($p->getMaxHealth());
                 if ($p->getAttributeMap() != null) {//just to be really sure
@@ -626,8 +629,9 @@ final class SWarena
             }
         }
         //Other players
-        foreach ($this->pg->getServer()->getLevelByName($this->world)->getPlayers() as $p)
-            $p->teleport($p->getServer()->getDefaultLevel()->getSpawnLocation());
+        foreach ($this->pg->getServer()->getLevelByName($this->world)->getPlayers() as $p){
+          $p->teleport(new Position("-0.491200", "77.000000", "9.780400", $this->pg->getServer()->getLevelByName("Lobby")), "179", "-3");
+        }
         $this->reload();
         return true;
     }
