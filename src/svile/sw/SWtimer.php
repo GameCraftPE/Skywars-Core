@@ -66,10 +66,11 @@ class SWtimer extends PluginTask
     {
         $pl = $this->plugin->getServer()->getOnlinePlayers();
         foreach($pl as $p){
-          if($p->getLevel()->getName() === "ELobby" or $p->getLevel()->getName() === "Lobby" or $p->getLevel()->getName() === "Hub" ){
+          if($p->getLevel()->getFolderName() === "ELobby" or $p->getLevel()->getName() === "Lobby" or $p->getLevel()->getName() === "Hub" ){
             if(!$p->getInventory()->getItemInHand()->hasEnchantments()){
                 $p->sendPopup(TF::GRAY."You are playing on ".TF::BOLD.TF::BLUE."GameCraft PE".TF::RESET."\n".TF::DARK_GRAY."[".TF::LIGHT_PURPLE.count($this->plugin->getServer()->getOnlinePlayers()).TF::DARK_GRAY."/".TF::LIGHT_PURPLE.$this->plugin->getServer()->getMaxPlayers().TF::DARK_GRAY."] | ".TF::YELLOW."$".$this->plugin->getServer()->getPluginManager()->getPlugin("EconomyAPI")->myMoney($p).TF::DARK_GRAY." | ".TF::BOLD.TF::AQUA."Vote: ".TF::RESET.TF::GREEN."gamecraftvote.tk");
             }
+          }
         }
         foreach ($this->getOwner()->arenas as $SWname => $SWarena)
             $SWarena->tick();
