@@ -65,6 +65,7 @@ use pocketmine\network\protocol\ContainerSetContentPacket;
 
 use pocketmine\level\Position;
 use pocketmine\level\Location;
+use pocketmine\math\Vector3;
 
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
