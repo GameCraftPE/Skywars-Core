@@ -42,7 +42,7 @@ join.health: 20
 drops.on.death: true
 
 # Players playing a SkyWars game won't be able to drop items if this option = "false".
-player.drop.item: true
+player.drop.item: false
 
 # This is the refill chests' switch. You can decide to refill chests or not.
 chest.refill: true
