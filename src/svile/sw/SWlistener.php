@@ -82,7 +82,7 @@ class SWlistener implements Listener
     }
 
     public function onJoin(PlayerJoinEvent $ev){
-	     $ev->getPlayer()->teleport(new Position("189.754200", "64.500000", "5.631000"), "90", "9", $ev->getPlayer()->getLevel()->getFolderName("Hub"));
+	    $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3", $ev->getPlayer()->getLevel()->getFolderName("Lobby"));    
 	      if ($ev->getPlayer()->hasPermission("rank.diamond")){
 		        $ev->getPlayer()->setGamemode("1");
 		        $pk = new ContainerSetContentPacket();
