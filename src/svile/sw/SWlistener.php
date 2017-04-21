@@ -432,9 +432,13 @@ class SWlistener implements Listener
                             break;
 
 
-                        case EntityDamageEvent::CAUSE_VOID:
-                            $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.void']));
-                            break;
+			case EntityDamageEvent::CAUSE_VOID:
+			    if($ev instanceof EntityDamageByChildEntityEvent and $ev->getChild() instanceof PrimedTNT) {
+				 $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.tnt']));
+			    }else{        
+                            	$message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.void']));
+                            } 
+			    break;
 
 
                         case EntityDamageEvent::CAUSE_LAVA:
