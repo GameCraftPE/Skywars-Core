@@ -469,7 +469,7 @@ class SWlistener implements Listener
     {
         if ($ev->getEntity() instanceof Player) {
             $p = $ev->getEntity();
-            if ($p->getLevel()->getFolderName() === "Lobby" || $p->getLevel()->getFolderName() === "Hub"){
+            if ($p->getLevel()->getFolderName() === "Lobby"){
                 $ev->setCancelled();
             }
             foreach ($this->pg->arenas as $a) {
@@ -580,8 +580,10 @@ class SWlistener implements Listener
 
     public function onBreak(BlockBreakEvent $ev)
     {
-      if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby" || $ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
+      if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
+	if (!$ev->getPlayer()->isOP(){    
           $ev->setCancelled();
+	}	
       }
         foreach ($this->pg->arenas as $a) {
             if ($t = $a->inArena($ev->getPlayer()->getName())) {
@@ -610,9 +612,11 @@ class SWlistener implements Listener
 
     public function onPlace(BlockPlaceEvent $ev)
     {
-        if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby" || $ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
-            $ev->setCancelled();
-        }
+        if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
+	    if (!$ev->getPlayer()->isOP(){    
+               $ev->setCancelled();
+	    }	
+       }
         foreach ($this->pg->arenas as $a) {
             if ($t = $a->inArena($ev->getPlayer()->getName())) {
                 if ($t == 2)
