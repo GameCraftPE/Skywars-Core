@@ -248,11 +248,6 @@ class SWlistener implements Listener
               $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3");
             }
         }
-        if ($ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
-            if($ev->getTo()->getFloorY() < 3){
-              $ev->getPlayer()->teleport(new Position("189.754200", "64.500000", "5.631000"), "90", "9");
-            }
-        }
         foreach ($this->pg->arenas as $a) {
             if ($a->inArena($ev->getPlayer()->getName())) {
                 if ($a->GAME_STATE == 0) {
@@ -581,7 +576,7 @@ class SWlistener implements Listener
     public function onBreak(BlockBreakEvent $ev)
     {
       if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
-	if (!$ev->getPlayer()->isOP(){    
+	if (!$ev->getPlayer()->isOP()){    
           $ev->setCancelled();
 	}	
       }
@@ -613,7 +608,7 @@ class SWlistener implements Listener
     public function onPlace(BlockPlaceEvent $ev)
     {
         if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
-	    if (!$ev->getPlayer()->isOP(){    
+	    if (!$ev->getPlayer()->isOP()){    
                $ev->setCancelled();
 	    }	
        }
