@@ -1,0 +1,7 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/GameCraftPE/Skywars-Core
+branches:
+- master
+projects:
+  Skywars-Core:
+    path: ""
+...
