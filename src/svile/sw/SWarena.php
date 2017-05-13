@@ -376,7 +376,7 @@ final class SWarena
             foreach ($this->pg->getServer()->getLevelByName($this->world)->getPlayers() as $p) {
                 $p->sendPopup(str_replace('{N}', date('i:s', ($this->countdown - $this->time)), $this->pg->lang['popup.countdown']));
                 if (($this->countdown - $this->time) <= 10)
-                    $p->getLevel()->addSound((new \pocketmine\level\sound\ButtonClickSound($p)), [$p]);
+                    $p->getLevel()->addSound((new \pocketmine\level\sound\ClickSound($p)), [$p]);
             }
         }
     }
