@@ -61,7 +61,7 @@ use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\block\BlockPlaceEvent;
-use pocketmine\network\protocol\ContainerSetContentPacket;
+use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
 
 use pocketmine\level\Position;
 use pocketmine\level\Location;
@@ -82,7 +82,7 @@ class SWlistener implements Listener
     }
 
     public function onJoin(PlayerJoinEvent $ev){
-	    $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3", $ev->getPlayer()->getLevel()->getFolderName("Lobby"));    
+	    $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3", $ev->getPlayer()->getLevel()->getFolderName("Lobby"));
 	      if ($ev->getPlayer()->hasPermission("rank.diamond")){
 		        $ev->getPlayer()->setGamemode("1");
 		        $pk = new ContainerSetContentPacket();
@@ -430,9 +430,9 @@ class SWlistener implements Listener
 			case EntityDamageEvent::CAUSE_VOID:
 			    if($ev instanceof EntityDamageByChildEntityEvent and $ev->getChild() instanceof PrimedTNT) {
 				 $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.tnt']));
-			    }else{        
+			    }else{
                             	$message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.void']));
-                            } 
+                            }
 			    break;
 
 
@@ -576,9 +576,9 @@ class SWlistener implements Listener
     public function onBreak(BlockBreakEvent $ev)
     {
       if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
-	if (!$ev->getPlayer()->isOP()){    
+	if (!$ev->getPlayer()->isOP()){
           $ev->setCancelled();
-	}	
+	}
       }
         foreach ($this->pg->arenas as $a) {
             if ($t = $a->inArena($ev->getPlayer()->getName())) {
@@ -608,9 +608,9 @@ class SWlistener implements Listener
     public function onPlace(BlockPlaceEvent $ev)
     {
         if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
-	    if (!$ev->getPlayer()->isOP()){    
+	    if (!$ev->getPlayer()->isOP()){
                $ev->setCancelled();
-	    }	
+	    }
        }
         foreach ($this->pg->arenas as $a) {
             if ($t = $a->inArena($ev->getPlayer()->getName())) {

@@ -49,11 +49,7 @@ use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 use pocketmine\math\Vector3;
 use pocketmine\block\Block;
-
-        #Use this for PHP7
 use pocketmine\nbt\tag\StringTag as Str;
-        #Use this for PHP5
-//use pocketmine\nbt\tag\String as Str;
 
 
 class SWcommands

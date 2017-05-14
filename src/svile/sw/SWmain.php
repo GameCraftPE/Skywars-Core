@@ -47,12 +47,8 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
 
 use pocketmine\nbt\NBT;
-        #Use these for PHP7
 use pocketmine\nbt\tag\CompoundTag as Compound;
 use pocketmine\nbt\tag\StringTag as Str;
-        #Use these for PHP5
-//use pocketmine\nbt\tag\Compound as Compound;
-//use pocketmine\nbt\tag\String as Str;
 
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;

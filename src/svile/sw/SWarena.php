@@ -42,9 +42,9 @@ namespace svile\sw;
 
 
 use pocketmine\Player;
-use pocketmine\network\protocol\AdventureSettingsPacket;
-use pocketmine\network\protocol\ContainerSetContentPacket;
-use pocketmine\network\protocol\SetPlayerGameTypePacket;
+use pocketmine\network\mcpe\protocol\AdventureSettingsPacket;
+use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
+use pocketmine\network\mcpe\protocol\SetPlayerGameTypePacket;
 
 use pocketmine\block\Block;
 use pocketmine\level\Position;
