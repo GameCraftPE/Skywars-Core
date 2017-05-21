@@ -43,6 +43,7 @@ namespace svile\sw;
 
 use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as TF;
+use pocketmine\event\entity\EntityInventoryChangeEvent;
 
 
 class SWtimer extends PluginTask
