@@ -85,6 +85,9 @@ class SWlistener implements Listener
 	    $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3", $ev->getPlayer()->getLevel()->getFolderName("Lobby"));
 	      if ($ev->getPlayer()->hasPermission("rank.diamond")){
 		        $ev->getPlayer()->setGamemode("1");
+		        $pk = new ContainerSetContentPacket();
+		        $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
+		        $ev->getPlayer()->dataPacket($pk);
 	      }
     }
 
