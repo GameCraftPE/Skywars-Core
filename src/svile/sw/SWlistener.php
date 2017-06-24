@@ -86,6 +86,7 @@ class SWlistener implements Listener
 	      if ($ev->getPlayer()->hasPermission("rank.diamond")){
 		        $ev->getPlayer()->setGamemode("1");
 		        $pk = new ContainerSetContentPacket();
+            $pk->targetEid = $ev->getPlayer()->getId();
 		        $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
 		        $ev->getPlayer()->dataPacket($pk);
 	      }

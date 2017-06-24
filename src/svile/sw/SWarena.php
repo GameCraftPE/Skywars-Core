@@ -481,6 +481,7 @@ final class SWarena
 	        if ($p->hasPermission("rank.diamond")){
 		        $p->setGamemode("1");
 		        $pk = new ContainerSetContentPacket();
+            $pk->targetEid = $p->getId();
 		        $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
 		        $p->dataPacket($pk);
 	        }
@@ -510,6 +511,7 @@ final class SWarena
                 $pk->globalPermission = 2;
                 $p->dataPacket($pk);
                 $pk = new ContainerSetContentPacket();
+                $pk->targetEid = $p->getId();
                 $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
                 $p->dataPacket($pk);
                 foreach ($this->players as $dname => $spawn) {
