@@ -477,14 +477,14 @@ final class SWarena
             $p->setGamemode($p->getServer()->getDefaultGamemode());
             $p->getInventory()->clearAll();
             $p->removeAllEffects();
-            $p->teleport(new Position("-0.491200", "77.000000", "9.780400", $this->pg->getServer()->getLevelByName("Lobby")), "179", "-3");
-	        if ($p->hasPermission("rank.diamond")){
-		        $p->setGamemode("1");
-		        $pk = new ContainerSetContentPacket();
-            $pk->targetEid = $p->getId();
-		        $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
-		        $p->dataPacket($pk);
-	        }
+            $p->teleport($this->pg->getServer()->getDefaultLevel()->getSafeSpawn());
+  	        if ($p->hasPermission("rank.diamond")){
+  		        $p->setGamemode("1");
+  		        $pk = new ContainerSetContentPacket();
+              $pk->targetEid = $p->getId();
+  		        $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
+  		        $p->dataPacket($pk);
+  	        }
             if ($p->isAlive()) {
                 $p->setSprinting(false);
                 $p->setSneaking(false);
@@ -498,7 +498,7 @@ final class SWarena
             }
             if (!$spectate) {
                 //TODO: Invisibility issues for death players
-                $p->teleport(new Position("-0.491200", "77.000000", "9.780400", $this->pg->getServer()->getLevelByName("Lobby")), "179", "-3");
+                $player->teleport($this->pg->getServer()->getDefaultLevel()->getSafeSpawn());
             } elseif ($this->GAME_STATE > 0 && 1 < count($this->players)) {
                 $p->gamemode = Player::SPECTATOR;
                 $p->spawnToAll();
@@ -632,7 +632,7 @@ final class SWarena
         }
         //Other players
         foreach ($this->pg->getServer()->getLevelByName($this->world)->getPlayers() as $p){
-          $p->teleport(new Position("-0.491200", "77.000000", "9.780400", $this->pg->getServer()->getLevelByName("Lobby")), "179", "-3");
+          $p->teleport($this->pg->getServer()->getDefaultLevel()->getSafeSpawn());
         }
         $this->reload();
         return true;

@@ -82,7 +82,6 @@ class SWlistener implements Listener
     }
 
     public function onJoin(PlayerJoinEvent $ev){
-	    $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3", $ev->getPlayer()->getLevel()->getFolderName("Lobby"));
 	      if ($ev->getPlayer()->hasPermission("rank.diamond")){
 		        $ev->getPlayer()->setGamemode("1");
 		        $pk = new ContainerSetContentPacket();
@@ -246,7 +245,7 @@ class SWlistener implements Listener
     {
         if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
             if($ev->getTo()->getFloorY() < 3){
-              $ev->getPlayer()->teleport(new Position("-0.491200", "77.000000", "9.780400"), "179", "-3");
+              $ev->getPlayer()->teleport($ev->getPlayer()->getLevel()->getSafeSpawn());
             }
         }
         foreach ($this->pg->arenas as $a) {
