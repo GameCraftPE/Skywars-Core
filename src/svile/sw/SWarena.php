@@ -498,7 +498,7 @@ final class SWarena
             }
             if (!$spectate) {
                 //TODO: Invisibility issues for death players
-                $player->teleport($this->pg->getServer()->getDefaultLevel()->getSafeSpawn());
+                $p->teleport($this->pg->getServer()->getDefaultLevel()->getSafeSpawn());
             } elseif ($this->GAME_STATE > 0 && 1 < count($this->players)) {
                 $p->gamemode = Player::SPECTATOR;
                 $p->spawnToAll();
