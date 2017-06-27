@@ -495,8 +495,6 @@ class SWlistener implements Listener
 
 
                             switch ($cause):
-
-
                                 case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
                                     if ($ev instanceof EntityDamageByEntityEvent) {
                                         $d = $ev->getDamager();
@@ -540,9 +538,9 @@ class SWlistener implements Listener
 
                             endswitch;
 
-                            foreach ($p->getLevel()->getPlayers() as $pl)
+                            foreach ($p->getLevel()->getPlayers() as $pl){
                                 $pl->sendMessage($message);
-
+                            }
                             //DROPS
                             if ($this->pg->configs['drops.on.death']) {
                                 foreach ($p->getDrops() as $item) {
