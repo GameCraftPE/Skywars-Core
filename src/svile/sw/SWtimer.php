@@ -63,7 +63,7 @@ class SWtimer extends PluginTask
     }
 
 
-    public function onRun($tick)
+    public function onRun(int $tick)
     {
         $pl = $this->plugin->getServer()->getOnlinePlayers();
         foreach($pl as $p){

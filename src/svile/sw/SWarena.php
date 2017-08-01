@@ -45,6 +45,7 @@ use pocketmine\Player;
 use pocketmine\network\mcpe\protocol\AdventureSettingsPacket;
 use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
 use pocketmine\network\mcpe\protocol\SetPlayerGameTypePacket;
+use pocketmine\network\mcpe\protocol\types\ContainerIds;
 
 use pocketmine\block\Block;
 use pocketmine\level\Position;
@@ -482,7 +483,7 @@ final class SWarena
   		        $p->setGamemode("1");
   		        $pk = new ContainerSetContentPacket();
               $pk->targetEid = $p->getId();
-  		        $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
+  		        $pk->windowid = ContainerIds::CREATIVE;
   		        $p->dataPacket($pk);
   	        }
             if ($p->isAlive()) {
@@ -512,7 +513,7 @@ final class SWarena
                 $p->dataPacket($pk);
                 $pk = new ContainerSetContentPacket();
                 $pk->targetEid = $p->getId();
-                $pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
+                $pk->windowid = ContainerIds::CREATIVE;
                 $p->dataPacket($pk);
                 foreach ($this->players as $dname => $spawn) {
                     if (($d = $this->pg->getServer()->getPlayer($dname)) instanceof Player)

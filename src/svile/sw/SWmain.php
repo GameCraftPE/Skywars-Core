@@ -274,7 +274,7 @@ class SWmain extends PluginBase
     }
 
 
-    public function onCommand(CommandSender $sender, Command $command, $label, array $args)
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args):bool
     {
         if (strtolower($command->getName()) == "\x73\x77") {
             //If SW command, just call svile\sw\SWcommands->onCommand();
@@ -389,7 +389,7 @@ class SWmain extends PluginBase
             if (count($ex) == 0b100) {
                 $this->getServer()->loadLevel($ex[0b11]);
                 if ($this->getServer()->getLevelByName($ex[0b11]) != null) {
-                    $tile = $this->getServer()->getLevelByName($ex[0b11])->getTile(new Vector3($ex[0], $ex[1], $ex[0b10]));
+                    $tile = $this->getServer()->getLevelByName($ex[0b11])->getTile(new Vector3($ex[0], $ex[1], $ex[2]));
                     if ($tile != null && $tile instanceof Sign) {
                         $text = $tile->getText();
                         $tile->setText($text[0], $text[1], TextFormat::GREEN . $players . TextFormat::BOLD . TextFormat::DARK_GRAY . '/' . TextFormat::RESET . TextFormat::GREEN . $slot, $state);
