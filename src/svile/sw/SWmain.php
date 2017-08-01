@@ -217,7 +217,11 @@ class SWmain extends PluginBase
             'death.player' => '@6{PLAYER} @ewas slain by @6{KILLER} @b{COUNT}',
             'death.arrow' => '@6{PLAYER} @ewas shot by @6{KILLER} @b{COUNT}',
             'death.void' => '@6{PLAYER} @efell to their dead @b{COUNT}',
-            'death.lava' => '@6{PLAYER} @ewas swimming in lava @b{COUNT}',//TODO: add more?
+            'death.fall' => '@6{PLAYER} @efell from a high place @b{COUNT}',
+            'death.lava' => '@6{PLAYER} @ewas swimming in lava @b{COUNT}',
+            'death.drowning' => '@6{PLAYER} @edrowned @b{COUNT}',
+            'death.exploding' => '@6{PLAYER} @eexploded @b{COUNT}',
+            'death.fire' => '@6{PLAYER} @ewent up in flames @b{COUNT}',//TODO: add more?
             'death.spectator' => '@f>@bYou are now a spectator!_EOL_@f>@bType @f/sw quit @bto exit from the game',
             'server.broadcast.winner' => '@0>@f{PLAYER} @bwon the game on @f{SWNAME}',
             'winner.reward.msg' => '@bYou won @f{VALUE}$_EOL_@7Your money: @f{MONEY}$'
@@ -389,7 +393,7 @@ class SWmain extends PluginBase
             if (count($ex) == 0b100) {
                 $this->getServer()->loadLevel($ex[0b11]);
                 if ($this->getServer()->getLevelByName($ex[0b11]) != null) {
-                    $tile = $this->getServer()->getLevelByName($ex[0b11])->getTile(new Vector3($ex[0], $ex[1], $ex[2]));
+                    $tile = $this->getServer()->getLevelByName($ex[0b11])->getTile(new Vector3($ex[0], (int)$ex[1], $ex[2]));
                     if ($tile != null && $tile instanceof Sign) {
                         $text = $tile->getText();
                         $tile->setText($text[0], $text[1], TextFormat::GREEN . $players . TextFormat::BOLD . TextFormat::DARK_GRAY . '/' . TextFormat::RESET . TextFormat::GREEN . $slot, $state);
@@ -403,7 +407,7 @@ class SWmain extends PluginBase
                 $ex = explode(':', $key);
                 $this->getServer()->loadLevel($ex[0b11]);
                 if ($this->getServer()->getLevelByName($ex[0b11]) instanceof \pocketmine\level\Level) {
-                    $tile = $this->getServer()->getLevelByName($ex[0b11])->getTile(new Vector3($ex[0], $ex[1], $ex[2]));
+                    $tile = $this->getServer()->getLevelByName($ex[0b11])->getTile(new Vector3($ex[0], (int)$ex[1], $ex[2]));
                     if ($tile instanceof Sign) {
                         $text = $tile->getText();
                         $tile->setText($text[0], $text[1], TextFormat::GREEN . $this->arenas[$val]->getSlot(true) . TextFormat::BOLD . TextFormat::DARK_GRAY . '/' . TextFormat::RESET . TextFormat::GREEN . $this->arenas[$val]->getSlot(), $text[3]);
