@@ -493,6 +493,7 @@ class SWlistener implements Listener
               //FAKE KILL PLAYER MSG
               $count = '[' . ($a->getSlot(true) - 1) . '/' . $a->getSlot() . ']';
               $cause = $ev->getEntity()->getLastDamageCause()->getCause();
+              $message = str_replace('{COUNT}', '[' . $a->getSlot(true) . '/' . $a->getSlot() . ']', str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['game.left']));
 
 
               switch ($cause):
@@ -537,11 +538,6 @@ class SWlistener implements Listener
                 case EntityDamageEvent::CAUSE_FALL:
                   $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.fall']));
                 break;
-
-                default:
-                  $message = str_replace('{COUNT}', '[' . $a->getSlot(true) . '/' . $a->getSlot() . ']', str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['game.left']));
-                break;
-
               endswitch;
 
               foreach ($p->getLevel()->getPlayers() as $pl){
@@ -553,7 +549,6 @@ class SWlistener implements Listener
                   $p->getLevel()->dropItem($p, $item);
                 }
               }
-
               //CLOSE
               $a->closePlayer($p, false, true);
             }

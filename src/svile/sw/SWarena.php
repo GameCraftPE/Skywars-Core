@@ -477,6 +477,8 @@ final class SWarena
             $p->gamemode = 4;//Just to make sure setGamemode() won't return false if the gm is the same
             $p->setGamemode($p->getServer()->getDefaultGamemode());
             $p->getInventory()->clearAll();
+            $p->getInventory()->sendArmorContents($p);
+            $p->getInventory()->sendContents($p);
             $p->removeAllEffects();
             $p->teleport($this->pg->getServer()->getDefaultLevel()->getSafeSpawn());
   	        if ($p->hasPermission("rank.diamond")){

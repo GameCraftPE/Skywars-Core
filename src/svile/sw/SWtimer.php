@@ -75,7 +75,6 @@ class SWtimer extends PluginTask
         }
         foreach ($this->getOwner()->arenas as $SWname => $SWarena)
             $SWarena->tick();
-
         if ($this->tick) {
             if (($this->seconds % 5 == 0))
                 $this->getOwner()->refreshSigns();
