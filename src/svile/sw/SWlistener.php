@@ -65,7 +65,6 @@ use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
 use pocketmine\network\mcpe\protocol\types\ContainerIds;
 use pocketmine\level\particle\DustParticle;
 
-
 use pocketmine\level\Position;
 use pocketmine\level\Location;
 use pocketmine\math\Vector3;
@@ -251,7 +250,7 @@ class SWlistener implements Listener
         $ev->getPlayer()->teleport($ev->getPlayer()->getLevel()->getSafeSpawn());
       }
     }
-    if($ev->getPlayer()->hasPermission("rank.diamond")){
+    if($ev->getPlayer()->hasPermission("rank.lapis")){
       $pos = $ev->getFrom();
       $red = new DustParticle($pos->add(0, 2.5), 252, 17, 17);
       $orange = new DustParticle($pos->add(0, 2.1), 252, 135, 17);
