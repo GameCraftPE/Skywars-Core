@@ -53,7 +53,7 @@ use pocketmine\nbt\tag\StringTag as Str;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
-use pocketmine\block\Block;
+use pocketmine\block\BlockFactory;
 use pocketmine\item\Item;
 use pocketmine\tile\Sign;
 use pocketmine\math\Vector3;
@@ -265,7 +265,7 @@ class SWmain extends PluginBase
 
         //THANKS TO Dan FOR THE HINT
         //https://github.com/thebigsmileXD
-        Block::$list[Block::GLASS] = \svile\sw\utils\Glass::class;
+        BlockFactory::$list[Block::GLASS] = \svile\sw\utils\Glass::class;
 
         $this->getLogger()->info(str_replace('\n', PHP_EOL, @gzinflate(@base64_decode("\x70\x5a\x42\x4e\x43\x6f\x4d\x77\x45\x45\x61\x76knVBs3dVS8VFWym00I0gUaZJMD8Sk1JP5D08WUlqFm7bWb7vzTcwtarVMotl7na/zLoMubNMmwwt83N8cQGRn3\x67fYBNoE/EdBFBDZFMa7YZgMGuHMcPYrlEqAW+qikQSLoJrGfhIwJ56lnZaRqvklrl200gD8tK38I1v/fQgZkyuuuvBXriKR9\x6f1QYNwlCvUTiis+D5SVPnhXBz//NcH"))));
     }
@@ -548,7 +548,7 @@ class SWmain extends PluginBase
             //BLOCKS
             'block' => array(
                 Item::STONE,
-                Item::WOODEN_PLANK,
+                Item::PLANKS,
                 Item::COBBLESTONE,
                 Item::DIRT
             ),
