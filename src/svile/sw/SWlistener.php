@@ -76,7 +76,6 @@ class SWlistener implements Listener
   /** @var SWmain */
   private $pg;
 
-
   public function __construct(SWmain $plugin)
   {
     $this->pg = $plugin;
@@ -498,45 +497,45 @@ class SWlistener implements Listener
 
               switch ($cause):
                 case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
-                  if ($ev instanceof EntityDamageByEntityEvent) {
-                    $d = $ev->getDamager();
-                    $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.player'])));
-                  }
+                if ($ev instanceof EntityDamageByEntityEvent) {
+                  $d = $ev->getDamager();
+                  $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.player'])));
+                }
                 break;
 
                 case EntityDamageEvent::CAUSE_PROJECTILE:
-                  if ($ev instanceof EntityDamageByEntityEvent) {
-                    $d = $ev->getDamager();
-                    $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.arrow'])));
-                  }
+                if ($ev instanceof EntityDamageByEntityEvent) {
+                  $d = $ev->getDamager();
+                  $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.arrow'])));
+                }
                 break;
 
                 case EntityDamageEvent::CAUSE_VOID:
-                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.void']));
+                $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.void']));
                 break;
 
                 case EntityDamageEvent::CAUSE_LAVA:
-                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.lava']));
+                $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.lava']));
                 break;
 
                 case EntityDamageEvent::CAUSE_FIRE:
-                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.fire']));
+                $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.fire']));
                 break;
 
                 case EntityDamageEvent::CAUSE_FIRE_TICK:
-                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.fire']));
+                $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.fire']));
                 break;
 
                 case EntityDamageEvent::DROWNING:
-                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.drowning']));
+                $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.drowning']));
                 break;
 
                 case EntityDamageEvent::CAUSE_BLOCK_EXPLOSION:
-                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.exploding']));
+                $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.exploding']));
                 break;
 
                 case EntityDamageEvent::CAUSE_FALL:
-                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.fall']));
+                $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.fall']));
                 break;
               endswitch;
 

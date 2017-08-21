@@ -53,7 +53,7 @@ use pocketmine\nbt\tag\StringTag as Str;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
-use pocketmine\block\Block;
+use pocketmine\block\BlockFactory;
 use pocketmine\item\Item;
 use pocketmine\tile\Sign;
 use pocketmine\math\Vector3;
@@ -78,7 +78,6 @@ class SWmain extends PluginBase
     private $db;
     /** @var \svile\sw\utils\SWeconomy */
     public $economy;
-
 
     public function onLoad()
     {
@@ -548,7 +547,7 @@ class SWmain extends PluginBase
             //BLOCKS
             'block' => array(
                 Item::STONE,
-                Item::WOODEN_PLANK,
+                Item::PLANKS,
                 Item::COBBLESTONE,
                 Item::DIRT
             ),

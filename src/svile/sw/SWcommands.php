@@ -48,6 +48,7 @@ use pocketmine\Player;
 
 use pocketmine\utils\TextFormat;
 use pocketmine\math\Vector3;
+use pocketmine\block\BlockFactory;
 use pocketmine\block\Block;
 use pocketmine\nbt\tag\StringTag as Str;
 
@@ -416,7 +417,7 @@ class SWcommands
                         if ($sender->getServer()->loadLevel($ex[0b11])) {
                             $block = $sender->getServer()->getLevelByName($ex[0b11])->getBlock(new Vector3($ex[0], $ex[1], $ex[0b10]));
                             if ($block->getId() == 0x3f || $block->getId() == 0x44)
-                                $sender->getServer()->getLevelByName($ex[0b11])->setBlock((new Vector3($ex[0], $ex[1], $ex[0b10])), Block::get(0));
+                                $sender->getServer()->getLevelByName($ex[0b11])->setBlock((new Vector3($ex[0], $ex[1], $ex[0b10])), BlockFactory::get(0));
                         }
                     }
                 }
@@ -458,7 +459,7 @@ class SWcommands
                             if ($sender->getServer()->loadLevel($ex[0b11])) {
                                 $block = $sender->getServer()->getLevelByName($ex[0b11])->getBlock(new Vector3($ex[0], $ex[1], $ex[0b10]));
                                 if ($block->getId() == 0x3f || $block->getId() == 0x44)
-                                    $sender->getServer()->getLevelByName($ex[0b11])->setBlock((new Vector3($ex[0], $ex[1], $ex[0b10])), Block::get(0));
+                                    $sender->getServer()->getLevelByName($ex[0b11])->setBlock((new Vector3($ex[0], $ex[1], $ex[0b10])), BlockFactory::get(0));
                             }
                         }
                         //Deleting signs from db & array
@@ -478,7 +479,7 @@ class SWcommands
                         if ($sender->getServer()->loadLevel($ex[0b11])) {
                             $block = $sender->getServer()->getLevelByName($ex[0b11])->getBlock(new Vector3($ex[0], $ex[1], $ex[0b10]));
                             if ($block->getId() == 0x3f || $block->getId() == 0x44)
-                                $sender->getServer()->getLevelByName($ex[0b11])->setBlock((new Vector3($ex[0], $ex[1], $ex[0b10])), Block::get(0));
+                                $sender->getServer()->getLevelByName($ex[0b11])->setBlock((new Vector3($ex[0], $ex[1], $ex[0b10])), BlockFactory::get(0));
                         }
                     }
                 }

@@ -47,6 +47,7 @@ use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
 use pocketmine\network\mcpe\protocol\SetPlayerGameTypePacket;
 use pocketmine\network\mcpe\protocol\types\ContainerIds;
 
+use pocketmine\block\BlockFactory;
 use pocketmine\block\Block;
 use pocketmine\level\Position;
 
@@ -580,6 +581,7 @@ final class SWarena
         foreach ($this->players as $name => $spawn) {
             if (($p = $this->pg->getServer()->getPlayer($name)) instanceof Player) {
 		            $this->giveKit($p);
+                $p->getInventory()->clearAll();
                 $p->setMaxHealth($this->pg->configs['join.max.health']);
                 $p->setMaxHealth($p->getMaxHealth());
                 if ($p->getAttributeMap() != null) {//just to be really sure
@@ -588,9 +590,9 @@ final class SWarena
                 }
                 $p->sendMessage($this->pg->lang['game.start']);
                 if ($p->getLevel()->getBlock($p->floor()->subtract(0, 2))->getId() == 20)
-                    $p->getLevel()->setBlock($p->floor()->subtract(0, 2), Block::get(0), true, false);
+                    $p->getLevel()->setBlock($p->floor()->subtract(0, 2), BlockFactory::get(0), true, false);
                 if ($p->getLevel()->getBlock($p->floor()->subtract(0, 1))->getId() == 20)
-                    $p->getLevel()->setBlock($p->floor()->subtract(0, 1), Block::get(0), true, false);
+                    $p->getLevel()->setBlock($p->floor()->subtract(0, 1), BlockFactory::get(0), true, false);
             }
         }
         $this->time = 0;
