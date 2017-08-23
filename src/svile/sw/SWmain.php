@@ -238,6 +238,7 @@ class SWmain extends PluginBase
 
         //Register timer and listener
         $this->getServer()->getScheduler()->scheduleRepeatingTask(new SWtimer($this), 19);
+        $this->getServer()->getScheduler()->scheduleRepeatingTask(new ParticleTask($this), 0.001);
         $this->getServer()->getPluginManager()->registerEvents(new SWlistener($this), $this);
 
         //Calls loadArenas() & loadSigns() to loads arenas & signs...
