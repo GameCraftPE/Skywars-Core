@@ -495,7 +495,7 @@ class SWlistener implements Listener
                 }else{
                   $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['game.left']));
                 }
-                foreach ($this->pg->getServer()->getLevelByName($a->getWorld())->getPlayers() as $pl){
+                foreach ($p->getLevel()->getPlayers() as $pl){
                   $pl->sendMessage($message);
                 }
               }
