@@ -54,6 +54,7 @@ use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 
 use pocketmine\block\BlockFactory;
+use pocketmine\block\Block;
 use pocketmine\item\Item;
 use pocketmine\tile\Sign;
 use pocketmine\math\Vector3;
