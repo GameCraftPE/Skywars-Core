@@ -249,6 +249,11 @@ class SWlistener implements Listener
         $ev->getPlayer()->teleport($ev->getPlayer()->getLevel()->getSafeSpawn());
       }
     }
+    if ($ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
+      if($ev->getTo()->getFloorY() < 3){
+        $ev->getPlayer()->teleport($ev->getPlayer()->getLevel()->getSafeSpawn());
+      }
+    }
     foreach ($this->pg->arenas as $a) {
       if ($a->inArena($ev->getPlayer()->getName())) {
         if ($a->GAME_STATE == 0) {
@@ -417,7 +422,7 @@ class SWlistener implements Listener
             }elseif($cause == EntityDamageEvent::CAUSE_DROWNING){
               $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.drowning']));
             }elseif($cause == EntityDamageEvent::CAUSE_ENTITY_EXPLOSION || $cause == EntityDamageEvent::CAUSE_BLOCK_EXPLOSION){
-              $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.tnt']));
+              $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.exploding']));
             }elseif($cause == EntityDamageEvent::CAUSE_VOID){
               $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.void']));
             }else{
@@ -442,6 +447,9 @@ class SWlistener implements Listener
     if ($ev->getEntity() instanceof Player) {
       $p = $ev->getEntity();
       if ($p->getLevel()->getFolderName() === "Lobby"){
+        $ev->setCancelled();
+      }
+      if ($p->getLevel()->getFolderName() === "Hub"){
         $ev->setCancelled();
       }
       foreach ($this->pg->arenas as $a) {
@@ -473,11 +481,15 @@ class SWlistener implements Listener
 
               if($ev instanceof EntityDamageEvent){
                 if($cause == EntityDamageEvent::CAUSE_ENTITY_ATTACK){
-                  $d = $ev->getDamager();
-                  $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.player'])));
+                  if ($event instanceof EntityDamageByEntityEvent) {
+                    $d = $ev->getDamager();
+                    $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.player'])));
+                  }
                 }elseif($cause == EntityDamageEvent::CAUSE_PROJECTILE){
-                  $d = $ev->getDamager();
-                  $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.arrow'])));
+                  if ($event instanceof EntityDamageByEntityEvent) {
+                    $d = $ev->getDamager();
+                    $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.arrow'])));
+                  }
                 }elseif($cause == EntityDamageEvent::CAUSE_FALL){
                   $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.fire']));
                 }elseif($cause == EntityDamageEvent::CAUSE_FIRE){
@@ -489,7 +501,7 @@ class SWlistener implements Listener
                 }elseif($cause == EntityDamageEvent::CAUSE_DROWNING){
                   $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.drowning']));
                 }elseif($cause == EntityDamageEvent::CAUSE_ENTITY_EXPLOSION || $cause == EntityDamageEvent::CAUSE_BLOCK_EXPLOSION){
-                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.tnt']));
+                  $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.exploding']));
                 }elseif($cause == EntityDamageEvent::CAUSE_VOID){
                   $message = str_replace('{COUNT}', $count, str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.void']));
                 }else{
@@ -536,6 +548,11 @@ class SWlistener implements Listener
         $ev->setCancelled();
       }
     }
+    if ($ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
+      if (!$ev->getPlayer()->isOP()){
+        $ev->setCancelled();
+      }
+    }
     foreach ($this->pg->arenas as $a) {
       if ($t = $a->inArena($ev->getPlayer()->getName())) {
         if ($t == 2)
@@ -564,6 +581,11 @@ class SWlistener implements Listener
   public function onPlace(BlockPlaceEvent $ev)
   {
     if ($ev->getPlayer()->getLevel()->getFolderName() === "Lobby"){
+      if (!$ev->getPlayer()->isOP()){
+        $ev->setCancelled();
+      }
+    }
+    if ($ev->getPlayer()->getLevel()->getFolderName() === "Hub"){
       if (!$ev->getPlayer()->isOP()){
         $ev->setCancelled();
       }

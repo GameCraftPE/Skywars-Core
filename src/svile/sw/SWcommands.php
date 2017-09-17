@@ -75,56 +75,6 @@ class SWcommands
     {
         if (!($sender instanceof Player) || !$sender->isOp()) {
             switch (strtolower(array_shift($args))):
-
-
-                case 'join':
-                    if (!(count($args) < 0b11)) {
-                        $sender->sendMessage(TextFormat::AQUA . '>' . TextFormat::RED . 'Usage: /sw ' . TextFormat::GREEN . 'join [SWname]' . TextFormat::GRAY . ' [PlayerName]');
-                        break;
-                    }
-
-                    if (isset($args[0])) {
-                        //SW NAME
-                        $SWname = TextFormat::clean(array_shift($args));
-                        if (!array_key_exists($SWname, $this->pg->arenas)) {
-                            $sender->sendMessage(TextFormat::AQUA . '>' . TextFormat::RED . 'Arena with name: ' . TextFormat::WHITE . $SWname . TextFormat::RED . ' doesn\'t exist');
-                            break;
-                        }
-                    } else {
-                        if ($sender instanceof Player) {
-                            foreach ($this->pg->arenas as $a) {
-                                if ($a->join($sender, false))
-                                    break 2;
-                            }
-                            $sender->sendMessage(TextFormat::RED . 'No games, retry later');
-                        }
-                        break;
-                    }
-
-                    $player = TextFormat::clean(array_shift($args));
-                    if (strlen($player) > 0 && $sender instanceof \pocketmine\command\ConsoleCommandSender) {
-                        $p = $sender->getServer()->getPlayer($player);
-                        if ($p instanceof Player) {
-                            if ($this->pg->inArena($p->getName())) {
-                                $p->sendMessage(TextFormat::AQUA . '>' . TextFormat::RED . 'You are already inside an arena');
-                                break;
-                            }
-                            $this->pg->arenas[$SWname]->join($p);
-                        } else {
-                            $sender->sendMessage(TextFormat::RED . 'Player not found!');
-                        }
-                    } elseif ($sender instanceof Player) {
-                        if ($this->pg->inArena($sender->getName())) {
-                            $sender->sendMessage(TextFormat::AQUA . '>' . TextFormat::RED . 'You are already inside an arena');
-                            break;
-                        }
-                        $this->pg->arenas[$SWname]->join($sender);
-                    } else {
-                        $sender->sendMessage(TextFormat::RED . 'Player not found!');
-                    }
-                    break;
-
-
                 case 'quit':
                     if (!empty($args)) {
                         $sender->sendMessage(TextFormat::AQUA . '>' . TextFormat::RED . 'Usage: /sw ' . TextFormat::GREEN . 'quit');

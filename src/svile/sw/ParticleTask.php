@@ -25,7 +25,7 @@ class ParticleTask extends PluginTask{
 
   public function onRun(int $currentTick){
     foreach($this->plugin->getServer()->getOnlinePlayers() as $p) {
-      if($p->getLevel()->getName() === $this->plugin->getServer()->getDefaultLevel()->getName()){
+      if($p->getLevel()->getName() === "Lobby" or $p->getLevel()->getName() === "Hub"){
         if($p->hasPermission("rank.lapis")) {
           $x = (cos(deg2rad($this->degrees)) * 0.6) + $p->x;
           $z = (sin(deg2rad($this->degrees)) * 0.6) + $p->z;
