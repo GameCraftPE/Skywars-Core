@@ -440,6 +440,10 @@ final class SWarena
     {
         if (in_array($playerName, $this->spectators)) {
             unset($this->spectators[array_search($playerName, $this->spectators)]);
+            foreach ($this->players as $name => $spawn) {
+                if ((($p = $this->pg->getServer()->getPlayer($name)) instanceof Player) && (($s = $this->pg->getServer()->getPlayer($playerName)) instanceof Player))
+                    $p->showPlayer($s);
+            }
             return true;
         }
         if (!array_key_exists($playerName, $this->players))
@@ -453,6 +457,10 @@ final class SWarena
                 $p->sendMessage(str_replace('{COUNT}', '[' . $this->getSlot(true) . '/' . $this->slot . ']', str_replace('{PLAYER}', $playerName, $this->pg->lang['game.left'])));
         if ($spectate && !in_array($playerName, $this->spectators))
             $this->spectators[] = $playerName;
+        foreach ($this->spectators as $sp) {
+            if ((($p = $this->pg->getServer()->getPlayer($playerName)) instanceof Player) && (($s = $this->pg->getServer()->getPlayer($sp)) instanceof Player))
+                $p->showPlayer($s);
+        }
         return true;
     }
 
@@ -467,6 +475,7 @@ final class SWarena
     {
         if ($this->quit($p->getName(), $left, $spectate)) {
             $p->gamemode = 4;//Just to make sure setGamemode() won't return false if the gm is the same
+            $p->setGamemode($p->getServer()->getDefaultGamemode());
             $p->getInventory()->clearAll();
             $p->getInventory()->sendArmorContents($p);
             $p->getInventory()->sendContents($p);
@@ -478,9 +487,7 @@ final class SWarena
               $pk->targetEid = $p->getId();
   		        $pk->windowid = ContainerIds::CREATIVE;
   		        $p->dataPacket($pk);
-  	        }else{
-              $p->setGamemode($p->getServer()->getDefaultGamemode());
-            }
+  	        }
             if ($p->isAlive()) {
                 $p->setSprinting(false);
                 $p->setSneaking(false);
@@ -497,6 +504,7 @@ final class SWarena
                 $p->teleport($p->getServer()->getLevelByName("Lobby")->getSafeSpawn());
             } elseif ($this->GAME_STATE > 0 && 1 < count($this->players)) {
                 $p->gamemode = Player::SPECTATOR;
+                $p->spawnToAll();
                 $pk = new SetPlayerGameTypePacket();
                 $pk->gamemode = Player::CREATIVE;
                 $p->dataPacket($pk);
@@ -509,6 +517,10 @@ final class SWarena
                 $pk->targetEid = $p->getId();
                 $pk->windowid = ContainerIds::CREATIVE;
                 $p->dataPacket($pk);
+                foreach ($this->players as $dname => $spawn) {
+                    if (($d = $this->pg->getServer()->getPlayer($dname)) instanceof Player)
+                        $d->hidePlayer($p);
+                }
                 $idmeta = explode(':', $this->pg->configs['spectator.quit.item']);
                 $p->getInventory()->setHeldItemIndex(0);
                 $p->getInventory()->setItemInHand(Item::get((int)$idmeta[0], (int)$idmeta[1], 1));
