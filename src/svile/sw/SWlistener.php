@@ -61,8 +61,6 @@ use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\SignChangeEvent;
 use pocketmine\event\block\BlockPlaceEvent;
-use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
-use pocketmine\network\mcpe\protocol\types\ContainerIds;
 
 use pocketmine\level\Position;
 use pocketmine\level\Location;
@@ -70,6 +68,18 @@ use pocketmine\math\Vector3;
 
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
+
+use xenialdan\customui\event\UIDataReceiveEvent;
+use xenialdan\customui\event\UICloseEvent;
+use pocketmine\network\mcpe\protocol\PacketPool;
+use xenialdan\customui\elements\Dropdown;
+use xenialdan\customui\API as UIAPI;
+
+use xenialdan\customui\windows\CustomForm;
+use xenialdan\customui\network\ModalFormRequestPacket;
+use xenialdan\customui\network\ModalFormResponsePacket;
+use xenialdan\customui\network\ServerSettingsRequestPacket;
+use xenialdan\customui\network\ServerSettingsResponsePacket;
 
 class SWlistener implements Listener
 {
@@ -82,13 +92,101 @@ class SWlistener implements Listener
     $this->pg = $plugin;
   }
 
+  /**
+  * @group UI Response Handling
+  * @param DataPacketReceiveEvent $ev
+  */
+  public function onPacket(DataPacketReceiveEvent $ev){
+    $packet = $ev->getPacket();
+    $player = $ev->getPlayer();
+    switch ($packet::NETWORK_ID){
+      case ModalFormResponsePacket::NETWORK_ID: {
+        /** @var ModalFormResponsePacket $packet */
+        $this->handleModalFormResponse($packet, $player);
+        $packet->reset();
+        $ev->setCancelled(true);
+        break;
+      }
+    }
+  }
+
+  /**
+  * @group UI Response Handling
+  * @param ModalFormResponsePacket $packet
+  * @param Player $player
+  * @return bool
+  */
+  public function handleModalFormResponse(ModalFormResponsePacket $packet, Player $player): bool{
+    $ev = new UIDataReceiveEvent($this->pg, $packet, $player);
+    if (is_null($ev->getData())) $ev = new UICloseEvent($this->pg, $packet, $player);
+    Server::getInstance()->getPluginManager()->callEvent($ev);
+    return true;
+  }
+
+  /**
+  * @param UIDataReceiveEvent $event
+  */
+  public function onUIDataReceiveEvent(UIDataReceiveEvent $event){
+    /* This makes sure that only events for this plugin are handled */
+    if($event->getPlugin() !== $this->pg) return;
+    switch ($id = $event->getID()){
+      case self::$uis['selections']:
+      /** @var CustomForm $ui */
+      $data = $event->getData();
+      $ui = UIAPI::getPluginUI($this->pg, $id);
+      $response = $ui->handle($data, $event->getPlayer());
+
+      $player = $event->getPlayer();
+      $kit = $response[1];
+      $time = $response[2];
+
+      if($kit === "Archer"){
+        $player->getInventory()->addItem(Item::get(261,0,1));
+        $player->getInventory()->addItem(Item::get(262,0,10));
+        $player->getInventory()->sendContents($player);
+      }elseif($kit === "Chicken"){
+        $player->getInventory()->addItem(Item::get(344,0,16));
+        $player->getInventory()->sendContents($player);
+      }elseif($kit === "Swordman"){
+        $player->getInventory()->addItem(Item::get(267,0,1));
+        $player->getInventory()->sendContents($player);
+      }elseif($kit === "Digger"){
+        $player->getInventory()->addItem(Item::get(257,0,1));
+        $player->getInventory()->sendContents($player);
+      }elseif($kit === "Spiderman"){
+        $player->getInventory()->addItem(Item::get(30,0,15));
+        $player->getInventory()->sendContents($player);
+      }elseif($kit === "Bomber"){
+        $player->getInventory()->addItem(Item::get(259,0,1));
+        $player->getInventory()->addItem(Item::get(46,0,3));
+        $player->getInventory()->sendContents($player);
+      }elseif($kit === "Golem"){
+        $player->getInventory()->setHelmet(Item::get(302));
+        $player->getInventory()->setChestplate(Item::get(303));
+        $player->getInventory()->setLeggings(Item::get(304));
+        $player->getInventory()->setBoots(Item::get(305));
+        $player->getInventory()->sendArmorContents($player);
+      }
+
+      //todo add this in the arena class
+      foreach ($this->pg->arenas as $a) {
+        if (($f = $a->inArena($ev->getPlayer()->getName()))) {
+          if($time === "Day"){
+            $a->timevotes["Day"] += 1;
+          }elseif($time === "Sunset"){
+            $a->timevotes["Sunset"] += 1;
+          }elseif($time === "Night"){
+            $a->timevotes["Night"] += 1;
+          }
+        }
+      }
+      break;
+    }
+  }
+
   public function onJoin(PlayerJoinEvent $ev){
     if ($ev->getPlayer()->hasPermission("rank.diamond")){
       $ev->getPlayer()->setGamemode("1");
-      $pk = new ContainerSetContentPacket();
-      $pk->targetEid = $ev->getPlayer()->getId();
-      $pk->windowid = ContainerIds::CREATIVE;
-      $ev->getPlayer()->dataPacket($pk);
     }
   }
 
@@ -409,12 +507,12 @@ class SWlistener implements Listener
               if ($event instanceof EntityDamageByEntityEvent) {
                 $d = $event->getDamager();
                 $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.player'])));
-               }
+              }
             }elseif($cause == EntityDamageEvent::CAUSE_PROJECTILE){
               if ($event instanceof EntityDamageByEntityEvent) {
                 $d = $event->getDamager();
                 if ($d instanceof Player){
-                 $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.arrow'])));
+                  $message = str_replace('{COUNT}', $count, str_replace('{KILLER}', $d->getDisplayName(), str_replace('{PLAYER}', $p->getDisplayName(), $this->pg->lang['death.arrow'])));
                 }
               }
             }elseif($cause == EntityDamageEvent::CAUSE_FALL){

@@ -59,6 +59,18 @@ use pocketmine\item\Item;
 use pocketmine\tile\Sign;
 use pocketmine\math\Vector3;
 
+use xenialdan\customui\event\UIDataReceiveEvent;
+use xenialdan\customui\event\UICloseEvent;
+use pocketmine\network\mcpe\protocol\PacketPool;
+use xenialdan\customui\elements\Dropdown;
+use xenialdan\customui\API as UIAPI;
+
+use xenialdan\customui\windows\CustomForm;
+use xenialdan\customui\network\ModalFormRequestPacket;
+use xenialdan\customui\network\ModalFormResponsePacket;
+use xenialdan\customui\network\ServerSettingsRequestPacket;
+use xenialdan\customui\network\ServerSettingsResponsePacket;
+
 
 class SWmain extends PluginBase
 {
@@ -271,7 +283,21 @@ class SWmain extends PluginBase
         $list[Block::GLASS] = \GameCraftPE\li\utils\Glass::class;
 
         $this->getLogger()->info(str_replace('\n', PHP_EOL, @gzinflate(@base64_decode("\x70\x5a\x42\x4e\x43\x6f\x4d\x77\x45\x45\x61\x76knVBs3dVS8VFWym00I0gUaZJMD8Sk1JP5D08WUlqFm7bWb7vzTcwtarVMotl7na/zLoMubNMmwwt83N8cQGRn3\x67fYBNoE/EdBFBDZFMa7YZgMGuHMcPYrlEqAW+qikQSLoJrGfhIwJ56lnZaRqvklrl200gD8tK38I1v/fQgZkyuuuvBXriKR9\x6f1QYNwlCvUTiis+D5SVPnhXBz//NcH"))));
+
+        PacketPool::registerPacket(new ModalFormRequestPacket());
+    		PacketPool::registerPacket(new ModalFormResponsePacket());
+    		PacketPool::registerPacket(new ServerSettingsRequestPacket());
+    		PacketPool::registerPacket(new ServerSettingsResponsePacket());
+    		/** call this AFTER registering packets! */
+    		$this->reloadUIs();
     }
+
+    public function reloadUIs(){
+      $ui = new CustomForm('Selections', 'Ranked player selections');
+  		$ui->addElement(new Dropdown('Select your kit', ['Archer', 'Chicken', 'Swordman', 'Digger', 'Spiderman', 'Bomber', 'Golem']));
+      $ui->addElement(new Dropdown('Time', ['Day', 'Sunset', 'Night']));
+      self::$uis['selections'] = UIAPI::addUI($this, $ui);
+  	}
 
 
     public function onDisable()
@@ -639,7 +665,6 @@ class SWmain extends PluginBase
             $templates[] = $fcontents;
 
         }
-
         shuffle($templates);
         return $templates;
     }

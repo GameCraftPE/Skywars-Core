@@ -42,10 +42,9 @@ namespace svile\sw;
 
 
 use pocketmine\Player;
-use pocketmine\network\mcpe\protocol\AdventureSettingsPacket;
-use pocketmine\network\mcpe\protocol\ContainerSetContentPacket;
 use pocketmine\network\mcpe\protocol\SetPlayerGameTypePacket;
-use pocketmine\network\mcpe\protocol\types\ContainerIds;
+
+use xenialdan\customui\API as UIAPI;
 
 use pocketmine\block\Block;
 use pocketmine\level\Position;
@@ -86,6 +85,8 @@ final class SWarena
     private $players = [];
     /** @var array */
     private $spectators = [];
+    /** @var array */
+    private $timevotes = [];
 
 
     /**
@@ -308,14 +309,12 @@ final class SWarena
         foreach ($this->pg->getServer()->getLevelByName($this->world)->getTiles() as $tile) {
             if ($tile instanceof Chest) {
                 //CLEARS CHESTS
-                for ($i = 0; $i < $tile->getSize(); $i++) {
-                    $tile->getInventory()->setItem($i, Item::get(0));
-                }
+                $tile->getInventory()->clearAll();
                 //SET CONTENTS
                 if (empty($contents))
                     $contents = $this->pg->getChestContents();
                 foreach (array_shift($contents) as $key => $val) {
-                    $tile->getInventory()->setItem($key, Item::get($val[0], 0, $val[1]));
+                    $tile->getInventory()->addItem(Item::get($val[0], 0, $val[1]));
                 }
             }
         }
@@ -416,9 +415,7 @@ final class SWarena
             $player->setFood(20);
         }
         $this->pg->getServer()->loadLevel($this->world);
-        $level = $this->pg->getServer()->getLevelByName($this->world);
-        $level->setTime(0);
-        $level->stopTime();
+        UIAPI::showUIbyID($main, $this->pg->$uis['selections'], $sender);
         $tmp = array_shift($this->spawns);
         $player->teleport(new Position($tmp['x'] + 0.5, $tmp['y'], $tmp['z'] + 0.5, $level), $tmp['yaw'], $tmp['pitch']);
         $this->players[$player->getName()] = $tmp;
@@ -440,6 +437,10 @@ final class SWarena
     {
         if (in_array($playerName, $this->spectators)) {
             unset($this->spectators[array_search($playerName, $this->spectators)]);
+            foreach ($this->players as $name => $spawn) {
+                if ((($p = $this->pg->getServer()->getPlayer($name)) instanceof Player) && (($s = $this->pg->getServer()->getPlayer($playerName)) instanceof Player))
+                    $p->showPlayer($s);
+            }
             return true;
         }
         if (!array_key_exists($playerName, $this->players))
@@ -453,6 +454,10 @@ final class SWarena
                 $p->sendMessage(str_replace('{COUNT}', '[' . $this->getSlot(true) . '/' . $this->slot . ']', str_replace('{PLAYER}', $playerName, $this->pg->lang['game.left'])));
         if ($spectate && !in_array($playerName, $this->spectators))
             $this->spectators[] = $playerName;
+            foreach ($this->spectators as $sp) {
+              if ((($p = $this->pg->getServer()->getPlayer($playerName)) instanceof Player) && (($s = $this->pg->getServer()->getPlayer($sp)) instanceof Player))
+                  $p->showPlayer($s);
+            }
         return true;
     }
 
@@ -474,10 +479,6 @@ final class SWarena
             $p->teleport($p->getServer()->getLevelByName("Lobby")->getSafeSpawn());
   	        if ($p->hasPermission("rank.diamond")){
   		        $p->setGamemode("1");
-  		        $pk = new ContainerSetContentPacket();
-              $pk->targetEid = $p->getId();
-  		        $pk->windowid = ContainerIds::CREATIVE;
-  		        $p->dataPacket($pk);
   	        }else{
               $p->setGamemode($p->getServer()->getDefaultGamemode());
             }
@@ -497,18 +498,14 @@ final class SWarena
                 $p->teleport($p->getServer()->getLevelByName("Lobby")->getSafeSpawn());
             } elseif ($this->GAME_STATE > 0 && 1 < count($this->players)) {
                 $p->gamemode = Player::SPECTATOR;
+                $p->spawnToAll();
                 $pk = new SetPlayerGameTypePacket();
                 $pk->gamemode = Player::CREATIVE;
                 $p->dataPacket($pk);
-                $pk = new AdventureSettingsPacket();
-                $pk->flags = 207;
-                $pk->userPermission = 2;
-                $pk->globalPermission = 2;
-                $p->dataPacket($pk);
-                $pk = new ContainerSetContentPacket();
-                $pk->targetEid = $p->getId();
-                $pk->windowid = ContainerIds::CREATIVE;
-                $p->dataPacket($pk);
+                foreach ($this->players as $dname => $spawn) {
+                    if (($d = $this->pg->getServer()->getPlayer($dname)) instanceof Player)
+                        $d->hidePlayer($p);
+                }
                 $idmeta = explode(':', $this->pg->configs['spectator.quit.item']);
                 $p->getInventory()->setHeldItemIndex(0);
                 $p->getInventory()->setItemInHand(Item::get((int)$idmeta[0], (int)$idmeta[1], 1));
@@ -523,51 +520,28 @@ final class SWarena
         return false;
     }
 
-   public function giveKit(Player $p){
-	   if ($p->hasPermission("kit.archer")){
-		   $p->getInventory()->addItem(Item::get(261,0,1));
-		   $p->getInventory()->addItem(Item::get(262,0,10));
-		   $p->getInventory()->sendContents($p);
-	   }
-	   if ($p->hasPermission("kit.chicken")){
-		   $p->getInventory()->addItem(Item::get(344,0,16));
-		   $p->getInventory()->sendContents($p);
-	   }
-	   if ($p->hasPermission("kit.swordman")){
-		   $p->getInventory()->addItem(Item::get(267,0,1));
-		   $p->getInventory()->sendContents($p);
-	   }
-	   if ($p->hasPermission("kit.digger")){
-		   $p->getInventory()->addItem(Item::get(257,0,1));
-		   $p->getInventory()->sendContents($p);
-	   }
-	   if ($p->hasPermission("kit.spiderman")){
-		   $p->getInventory()->addItem(Item::get(30,0,15));
-		   $p->getInventory()->sendContents($p);
-	   }
-	   if ($p->hasPermission("kit.bomber")){
-		   $p->getInventory()->addItem(Item::get(259,0,1));
-		   $p->getInventory()->addItem(Item::get(46,0,3));
-		   $p->getInventory()->sendContents($p);
-	   }
-	   if ($p->hasPermission("kit.golem")){
-		   $p->getInventory()->setHelmet(Item::get(302));
-		   $p->getInventory()->setChestplate(Item::get(303));
-		   $p->getInventory()->setLeggings(Item::get(304));
-		   $p->getInventory()->setBoots(Item::get(305));
-		   $p->getInventory()->sendArmorContents($p);
-	   }
-   }
-
 
     /** VOID */
     private function start()
     {
+        if($this->timevotes["Sunset"] > $this->timevotes["Night"] and $this->timevotes["Sunset"] > $this->timevotes["Day"]){
+          $level = $this->pg->getServer()->getLevelByName($this->world);
+          $level->setTime(12000);
+          $level->stopTime();
+        }elseif($this->timevotes["Night"] > $this->timevotes["Sunset"] and $this->timevotes["Night"] > $this->timevotes["Day"]){
+          $level = $this->pg->getServer()->getLevelByName($this->world);
+          $level->setTime(13000);
+          $level->stopTime();
+        }else{
+          $level = $this->pg->getServer()->getLevelByName($this->world);
+          $level->setTime(1000);
+          $level->stopTime();
+        }
+
         if ($this->pg->configs['chest.refill'])
             $this->refillChests();
         foreach ($this->players as $name => $spawn) {
             if (($p = $this->pg->getServer()->getPlayer($name)) instanceof Player) {
-		            $this->giveKit($p);
                 $p->setMaxHealth($this->pg->configs['join.max.health']);
                 $p->setMaxHealth($p->getMaxHealth());
                 if ($p->getAttributeMap() != null) {//just to be really sure
